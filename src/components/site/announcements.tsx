@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Megaphone, ChevronRight } from "lucide-react";
-import { TRACKS, type TrackId } from "@/lib/competition-data";
+import { type Track } from "@/lib/competition-data";
 
 function formatDate(iso: string) {
   // Returns { day, monthBn, year } — Bengali-style date label
@@ -31,53 +30,25 @@ function formatDate(iso: string) {
   return { day: String(day).padStart(2, "0"), month, year: yearBn };
 }
 
-export function Announcements() {
-  const [activeTrack, setActiveTrack] = useState<TrackId>("quiz");
-  const track = TRACKS.find((t) => t.id === activeTrack)!;
+export function Announcements({ track }: { track: Track }) {
   // newest first
   const items = [...track.announcements].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   return (
-    <section id="announcements" className="relative py-20 sm:py-28 bg-geometric-light">
+    <section id="announcements" className="relative py-20 sm:py-28 bg-geometric-light scroll-mt-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Section header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
           <div>
-            <p className="eyebrow mb-4">ঘোষণা · Announcements</p>
+            <p className="eyebrow mb-4">ঘোষণা · Announcements · Track {track.index}</p>
             <h2 className="font-display text-3xl sm:text-4xl md:text-[2.6rem] leading-tight text-[var(--navy)] mb-3">
               সর্বশেষ আপডেট
             </h2>
             <p className="text-[var(--muted-foreground)] text-sm">
-              প্রতিটি ট্র্যাকের আপডেট আলাদাভাবে প্রকাশিত হয়।
+              {track.heading} ({track.typeBn})-এর সকল আনুষ্ঠানিক ঘোষণা ও আপডেট।
             </p>
-          </div>
-
-          {/* Track toggle — segmented control */}
-          <div
-            role="tablist"
-            aria-label="Announcements track filter"
-            className="inline-flex border border-[var(--border)] bg-white self-start md:self-end"
-          >
-            {TRACKS.map((t) => {
-              const active = t.id === activeTrack;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setActiveTrack(t.id)}
-                  className={`px-4 py-2 text-xs font-latin-display tracking-[0.14em] uppercase transition-colors ${
-                    active
-                      ? "bg-[var(--navy)] text-[var(--gold)]"
-                      : "bg-transparent text-[var(--muted-foreground)] hover:text-[var(--navy)]"
-                  }`}
-                >
-                  {t.type}
-                </button>
-              );
-            })}
           </div>
         </div>
 

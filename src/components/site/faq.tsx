@@ -6,25 +6,31 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { FAQ } from "@/lib/competition-data";
+import { type Track } from "@/lib/competition-data";
 
-export function Faq() {
+export function Faq({ track }: { track: Track }) {
   return (
-    <section id="faq" className="relative py-20 sm:py-28 bg-[var(--cream)]">
+    <section id="faq" className="relative py-20 sm:py-28 bg-[var(--cream)] scroll-mt-32">
       <div className="mx-auto max-w-3xl px-5 sm:px-8">
         {/* Section header */}
         <div className="text-center mb-12">
-          <p className="eyebrow mb-4">প্রশ্নোত্তর · FAQ</p>
+          <p className="eyebrow mb-4">প্রশ্নোত্তর · FAQ · Track {track.index}</p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-[2.6rem] leading-tight text-[var(--navy)] mb-3">
             সাধারণ জিজ্ঞাসা
           </h2>
           <p className="font-latin-display italic text-[var(--muted-foreground)] text-sm">
-            Frequently asked questions.
+            Frequently asked questions for {track.heading}.
           </p>
         </div>
 
-        <Accordion type="single" collapsible defaultValue="faq-0" className="w-full">
-          {FAQ.map((item, i) => (
+        <Accordion
+          key={track.id}
+          type="single"
+          collapsible
+          defaultValue="faq-0"
+          className="w-full"
+        >
+          {track.faqs.map((item, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}

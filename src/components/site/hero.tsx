@@ -1,9 +1,14 @@
 "use client";
 
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { TRACKS, META } from "@/lib/competition-data";
+import { ArrowUpRight } from "lucide-react";
+import { TRACKS, META, type TrackId } from "@/lib/competition-data";
 
-export function Hero() {
+interface HeroProps {
+  activeTrack?: TrackId;
+  onSelectTrack?: (id: TrackId) => void;
+}
+
+export function Hero({ activeTrack = "quiz", onSelectTrack }: HeroProps) {
   return (
     <section
       id="top"
@@ -54,7 +59,7 @@ export function Hero() {
         {/* CTAs */}
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href="#tracks"
+            href="#track-tabs"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--gold)] text-[var(--navy-deep)] text-sm font-semibold rounded-sm hover:bg-[var(--gold-soft)] transition-colors w-full sm:w-auto justify-center"
           >
             ট্র্যাক দেখুন
@@ -70,48 +75,47 @@ export function Hero() {
 
         {/* Two-track preview */}
         <div className="mt-16 sm:mt-20 relative grid md:grid-cols-2 gap-6 md:gap-0 items-stretch">
-          {TRACKS.map((track, i) => (
-            <a
-              key={track.id}
-              href={`#tracks`}
-              className={`group block h-full px-6 sm:px-8 py-7 rounded-sm border border-[var(--gold)]/20 bg-white/[0.03] hover:bg-white/[0.06] hover:border-[var(--gold)]/50 transition-all ${
-                i === 0 ? "md:mr-4" : "md:ml-4"
-              }`}
-            >
-              <div className="flex items-baseline justify-between mb-3">
-                <span className="font-latin-display text-[11px] tracking-[0.2em] uppercase text-[var(--gold)]">
-                  Track {track.index} · {track.type}
-                </span>
-              </div>
-              <h3 className="font-display text-2xl sm:text-[1.6rem] leading-snug text-[var(--cream)] mb-2">
-                {track.heading}
-              </h3>
-              <p className="text-[var(--cream)]/60 text-xs font-latin-display italic mb-4">
-                {track.headingLatin}
-              </p>
-              <p className="text-[var(--cream)]/70 text-sm leading-relaxed">
-                {track.tagline}
-              </p>
-              <div className="mt-5 flex items-center justify-between text-xs text-[var(--gold-soft)]">
-                <span>{track.teamSize}</span>
-                <span className="font-latin-display tracking-wider uppercase text-[10px] group-hover:translate-x-1 transition-transform">
-                  Details →
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        {/* Scroll cue */}
-        <div className="mt-16 flex justify-center">
-          <a
-            href="#about"
-            className="inline-flex flex-col items-center gap-2 text-[var(--cream)]/50 hover:text-[var(--gold)] transition-colors"
-            aria-label="Scroll down"
-          >
-            <span className="font-latin-display text-[10px] tracking-[0.2em] uppercase">Scroll</span>
-            <ArrowDown className="h-4 w-4 animate-pulse" />
-          </a>
+          {TRACKS.map((track, i) => {
+            const isSelected = activeTrack === track.id;
+            return (
+              <a
+                key={track.id}
+                href="#track-tabs"
+                onClick={() => onSelectTrack?.(track.id)}
+                className={`group block h-full px-6 sm:px-8 py-7 rounded-sm border transition-all ${
+                  isSelected
+                    ? "border-[var(--gold)]/60 bg-white/[0.06]"
+                    : "border-[var(--gold)]/20 bg-white/[0.03] hover:bg-white/[0.06] hover:border-[var(--gold)]/50"
+                } ${i === 0 ? "md:mr-4" : "md:ml-4"}`}
+              >
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="font-latin-display text-[11px] tracking-[0.2em] uppercase text-[var(--gold)]">
+                    Track {track.index} · {track.type}
+                  </span>
+                  {isSelected && (
+                    <span className="font-latin-display text-[10px] tracking-[0.16em] uppercase text-[var(--gold)] border border-[var(--gold)]/40 px-2 py-0.5">
+                      Selected
+                    </span>
+                  )}
+                </div>
+                <h3 className="font-display text-2xl sm:text-[1.6rem] leading-snug text-[var(--cream)] mb-2">
+                  {track.heading}
+                </h3>
+                <p className="text-[var(--cream)]/60 text-xs font-latin-display italic mb-4">
+                  {track.headingLatin}
+                </p>
+                <p className="text-[var(--cream)]/70 text-sm leading-relaxed">
+                  {track.tagline}
+                </p>
+                <div className="mt-5 flex items-center justify-between text-xs text-[var(--gold-soft)]">
+                  <span>{track.teamSize}</span>
+                  <span className="font-latin-display tracking-wider uppercase text-[10px] group-hover:translate-x-1 transition-transform">
+                    Open Track →
+                  </span>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </div>
 

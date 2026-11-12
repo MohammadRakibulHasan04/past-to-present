@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Clock, MapPin, Radio, CheckCircle2, CalendarDays } from "lucide-react";
-import { TRACKS, type Milestone, type MilestoneStatus, type TrackId } from "@/lib/competition-data";
+import { type Milestone, type MilestoneStatus, type Track } from "@/lib/competition-data";
 
 function StatusPill({ status }: { status: MilestoneStatus }) {
   if (status === "live") {
@@ -98,75 +97,23 @@ function MilestoneRow({
   );
 }
 
-export function Timeline() {
-  const [activeTrack, setActiveTrack] = useState<TrackId>("quiz");
-  const track = TRACKS.find((t) => t.id === activeTrack)!;
+export function Timeline({ track }: { track: Track }) {
   const liveCount = track.timeline.filter((m) => m.status === "live").length;
   const completedCount = track.timeline.filter((m) => m.status === "completed").length;
   const progressPct = Math.round((completedCount / track.timeline.length) * 100);
 
   return (
-    <section id="timeline" className="relative py-20 sm:py-28 bg-geometric-light">
+    <section id="timeline" className="relative py-20 sm:py-28 bg-geometric-light scroll-mt-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Section header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <p className="eyebrow mb-4">সময়রেখা · Timeline</p>
+          <p className="eyebrow mb-4">সময়রেখা · Timeline · Track {track.index}</p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-[2.6rem] leading-tight text-[var(--navy)] mb-3">
             প্রতিটি ধাপ, একটি নির্দিষ্ট সময়ে
           </h2>
           <p className="font-latin-display italic text-[var(--muted-foreground)] text-sm">
-            Every milestone, on a defined date.
+            Every milestone for {track.heading}, on a defined date.
           </p>
-        </div>
-
-        {/* Track toggle */}
-        <div className="mb-10">
-          <div
-            role="tablist"
-            aria-label="Select competition track"
-            className="grid sm:grid-cols-2 gap-3 max-w-3xl mx-auto"
-          >
-            {TRACKS.map((t) => {
-              const active = t.id === activeTrack;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setActiveTrack(t.id)}
-                  className={`group text-left p-4 border transition-all ${
-                    active
-                      ? "border-[var(--gold)] bg-white shadow-[0_8px_24px_-16px_rgba(18,42,77,0.25)]"
-                      : "border-[var(--border)] bg-white/40 hover:bg-white hover:border-[var(--gold)]/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 mb-1">
-                    <span
-                      className={`font-latin-display text-xl leading-none ${
-                        active ? "text-[var(--gold-deep)]" : "text-[var(--muted-foreground)]"
-                      }`}
-                    >
-                      {t.index}
-                    </span>
-                    <span
-                      className={`font-latin-display text-[10px] tracking-[0.2em] uppercase ${
-                        active ? "text-[var(--gold-deep)]" : "text-[var(--muted-foreground)]"
-                      }`}
-                    >
-                      {t.type}
-                    </span>
-                  </div>
-                  <p
-                    className={`font-display text-lg leading-tight ${
-                      active ? "text-[var(--navy)]" : "text-[var(--muted-foreground)]"
-                    }`}
-                  >
-                    {t.heading}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
         </div>
 
         {/* Progress strip */}

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { FileText, FileSpreadsheet, Link as LinkIcon, Video, Download, ExternalLink } from "lucide-react";
-import { TRACKS, type Resource, type TrackId } from "@/lib/competition-data";
+import { type Resource, type Track } from "@/lib/competition-data";
 
 function ResourceIcon({ type }: { type: Resource["type"] }) {
   if (type === "PDF") return <FileText className="h-5 w-5" />;
@@ -11,56 +10,26 @@ function ResourceIcon({ type }: { type: Resource["type"] }) {
   return <LinkIcon className="h-5 w-5" />;
 }
 
-export function Resources() {
-  const [activeTrack, setActiveTrack] = useState<TrackId>("quiz");
-  const track = TRACKS.find((t) => t.id === activeTrack)!;
-
+export function Resources({ track }: { track: Track }) {
   return (
-    <section id="resources" className="relative py-20 sm:py-28 bg-[var(--cream)]">
+    <section id="resources" className="relative py-20 sm:py-28 bg-[var(--cream)] scroll-mt-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Section header */}
         <div className="grid md:grid-cols-12 gap-6 items-end mb-10">
           <div className="md:col-span-7">
-            <p className="eyebrow mb-4">রিসোর্স · Resources</p>
+            <p className="eyebrow mb-4">রিসোর্স · Resources · Track {track.index}</p>
             <h2 className="font-display text-3xl sm:text-4xl md:text-[2.6rem] leading-tight text-[var(--navy)] mb-3">
               প্রস্তুতির উপকরণ
             </h2>
             <p className="text-[var(--muted-foreground)] text-sm">
-              প্রতিটি ট্র্যাকের জন্য নির্দিষ্ট সিলেবাস, কেইস ব্রিফ ও রেফারেন্স উপকরণ একত্রিত।
+              {track.heading} ({track.typeBn})-এর জন্য নির্ধারিত সিলেবাস ও রেফারেন্স উপকরণ।
             </p>
           </div>
           <div className="md:col-span-5">
-            <p className="font-latin-display italic text-xs text-[var(--gold-deep)] text-right">
+            <p className="font-latin-display italic text-xs text-[var(--gold-deep)] md:text-right">
               Materials are released on the dates shown in the timeline.
             </p>
           </div>
-        </div>
-
-        {/* Track selector — pill style */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {TRACKS.map((t) => {
-            const active = t.id === activeTrack;
-            return (
-              <button
-                key={t.id}
-                onClick={() => setActiveTrack(t.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2 border text-sm transition-all ${
-                  active
-                    ? "border-[var(--navy)] bg-[var(--navy)] text-[var(--cream)]"
-                    : "border-[var(--border)] bg-white text-[var(--navy)] hover:border-[var(--gold)]"
-                }`}
-              >
-                <span
-                  className={`font-latin-display text-xs ${
-                    active ? "text-[var(--gold)]" : "text-[var(--gold-deep)]"
-                  }`}
-                >
-                  {t.index}
-                </span>
-                <span className="font-medium">{t.heading}</span>
-              </button>
-            );
-          })}
         </div>
 
         {/* Resource grid */}
