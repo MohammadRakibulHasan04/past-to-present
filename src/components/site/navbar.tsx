@@ -48,12 +48,9 @@ export function Navbar() {
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className="group relative inline-flex flex-col items-center leading-tight py-1"
+                  className="group relative inline-flex items-center py-1"
                 >
-                  <span className="text-sm font-medium text-[var(--navy)] group-hover:text-[var(--gold-deep)] transition-colors">
-                    {item.label}
-                  </span>
-                  <span className="text-[9px] font-latin-display tracking-[0.14em] uppercase text-[var(--muted-foreground)] group-hover:text-[var(--gold-deep)] transition-colors">
+                  <span className="font-latin text-sm font-medium text-[var(--navy)] group-hover:text-[var(--gold-deep)] transition-colors">
                     {item.labelLatin}
                   </span>
                   <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[var(--gold)] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
@@ -90,12 +87,9 @@ export function Navbar() {
                 <a
                   href={`#${item.id}`}
                   onClick={() => setOpen(false)}
-                  className="flex items-baseline justify-between py-3 border-b border-[var(--border)]/60"
+                  className="block py-3 border-b border-[var(--border)]/60 font-latin text-[var(--navy)] font-medium"
                 >
-                  <span className="text-[var(--navy)] font-medium">{item.label}</span>
-                  <span className="text-[10px] font-latin-display tracking-[0.14em] uppercase text-[var(--gold-deep)]">
-                    {item.labelLatin}
-                  </span>
+                  {item.labelLatin}
                 </a>
               </li>
             ))}
